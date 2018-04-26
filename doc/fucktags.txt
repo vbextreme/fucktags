@@ -1,0 +1,102 @@
+*fucktags.txt* create and display tags
+
+			 _____           _    _____               
+			|  ___|   _  ___| | _|_   _|_ _  __ _ ___  ~
+			| |_ | | | |/ __| |/ / | |/ _` |/ _` / __| ~
+			|  _|| |_| | (__|   <  | | (_| | (_| \__ \ ~
+			|_|   \__,_|\___|_|\_\ |_|\__,_|\__, |___/ ~
+						                    |___/      ~
+
+					Create and display Tags
+
+
+==============================================================================
+CONTENTS                                                       *clam-contents*
+
+    1. Usage ........................... |FuckTagsUsage|
+    2. Configuration ................... |FuckTagsConfiguration|
+        2.1 g:fkt_win_position.......... |FuckTagsConfiguration_win_position|
+        2.2 g:fkt_char_open ............ |FuckTagsConfiguration_char_open|
+        2.3 g:fkt_char_closed .......... |FuckTagsConfiguration_char_closed|
+    3. License ......................... |FuckTagsLicense|
+    4. Bugs ............................ |FuckTagsBugs|
+    5. Contributing .................... |FuckTagsContributing|
+    6. Changelog ....................... |FuckTagsChangelog|
+
+==============================================================================
+1. Usage                                                       *FuckTagsUsage*
+
+Call function FkT_generate_tags() for generate tags file, automatic 
+dependencies resolver for C/C++/Perl/Perl6 languages
+    :call FkT_generate_tags()
+
+Call function FkT_toggle_bar() for open window with tags
+	:call FkT_toggle_bar()
+
+you can remap
+	nmap <F8> :call FkT_toggle_bar()
+
+on window bar have mapped this key:
+	q exit
+	e expand
+	E expand all
+   
+==============================================================================
+2. Configuration                                       *FuckTagsConfiguration*
+
+You can configure the following settings to change how FuckTags works.
+
+------------------------------------------------------------------------------
+2.1 g:fkt_win_position                    *FuckTagsConfiguration_win_position*
+
+Set this to change default window position: >
+
+    let g:fkt_win_position = 'right'
+
+Default: 'right'
+values: left, right, top, bottom
+
+------------------------------------------------------------------------------
+2.2 g:fkt_char_open                          *FuckTagsConfiguration_char_open*
+
+Set this to change default cher for open group: >
+
+    let g:fkt_char_open = 'v'
+
+Default: '-'
+
+------------------------------------------------------------------------------
+2.2 g:fkt_char_closed                      *FuckTagsConfiguration_char_closed*
+
+Set this to change default cher for closed group: >
+
+    let g:fkt_char_closed = '>'
+
+Default: '+'
+
+==============================================================================
+3. License                                                   *FuckTagsLicense*
+
+FuckTags is GPLv3 licensed.
+
+==============================================================================
+4. Bugs                                                         *FuckTagsBugs*
+
+If you find a bug please post it on the issue tracker:
+http://github.com//
+
+==============================================================================
+5. Contributing                                         *FuckTagsContributing*
+
+Think you can make this plugin better?  Awesome!  Fork it on GitHub and send 
+a pull request.
+
+GitHub: http://github.com//
+
+==============================================================================
+6. Changelog                                               *FuckTagsChangelog*
+
+v0.0
+    * Initial release.
+
+==============================================================================
