@@ -76,21 +76,55 @@ sub vim_json_exists {
 
 sub call_ctags {
 	my ($path,$file) = @_;
+	dbg "<ctags>$file\n";
 	return system("$CTAGS -f $path $CTAGS_OPTIONS $file &> /dev/null");
 }
 
-sub tags_remove_files {
-	my ($path, $file) = @_;
-	my $nwtags = $path . '.tmp';
+sub tags_already {
+	my ($ftags, $file) = @_;
+	my $fs;
+	unless ( open $fs, '<', $ftags ) {
+		dbg "<file already>error cant't open $ftags\n";
+		return 0;
+	}
 
-	open my $fd, '>', $nwtags or return;
-	open my $fs, '<', $path or return;
+	while (my $line = <$fs>) {
+		if ( $line =~ /\Q$file\E/ ) {
+			dbg "<file already>True\n";
+			return 1;	
+		}
+	}
+	dbg "<file already>False\n";
+	return 0;
+}
+
+sub tags_remove_files {
+	my ($ftags, $file, $timetags) = @_;
+	my $nwtags = $ftags . '.tmp';
+	
+	if (tags_already($ftags,$file) and file_time($file) < $timetags) {
+		dbg "<timecompare>file is old\n";
+		return 0;
+	}
+	dbg "<tag remove>from tags\n";
+	open my $fd, '>', $nwtags or return 1;
+	open my $fs, '<', $ftags or return 1;
 	while (my $line = <$fs>) {
 		next if $line =~ /\Q$file\E/;
 		print $fd $line;
 	}
-	unlink $path;
-	rename $nwtags, $path;
+	unlink $ftags;
+	rename $nwtags, $ftags;
+	return 1;
+}
+
+sub list_ctags {
+	my ($path,@files) = @_;
+	my $t = file_time("$path/tags");
+	for my $file (@files) {
+		dbg "<list ctags>$file\n";
+		call_ctags("$path/tags",$file) if tags_remove_files("$path/tags",$file,$t);
+	}
 }
 
 sub search_file_reverse {
@@ -152,6 +186,11 @@ sub search_dir {
 	return @ret;
 }
 
+sub file_time {
+	my ($path) = @_;
+	return (stat($path))[9];
+} 
+
 #############
 ### C/C++ ###
 #############
@@ -194,11 +233,9 @@ sub generate_c_dependencies {
 
 sub generate_c_tags {
 	my ($path,$cfile) = @_;
+	dbg "<lang type>C/C++\n";
 	my @deps = generate_c_dependencies($path,$cfile);
-	for my $file (@deps) {
-		tags_remove_files("$path/tags",$file);
-		call_ctags("$path/tags",$file);
-	}
+	list_ctags($path,@deps);
 }
 
 ###############
@@ -244,13 +281,11 @@ sub generate_perl_uses {
 }
 
 sub generate_perl_tags {
-	my ($path,$pfile,$lang) = @_;
-	my @uses = generate_perl_uses($pfile,$lang);
-	push @uses, $pfile;
-	for my $file (@uses) {
-		tags_remove_files("$path/tags",$file);
-		call_ctags("$path/tags",$file);
-	}
+	my ($path,$file,$lang) = @_;
+	dbg "<lang type>perl/perl6\n";
+	my @uses = generate_perl_uses($file,$lang);
+	push @uses, $file;
+	list_ctags($path,@uses);
 }
 
 ###############
@@ -259,6 +294,7 @@ sub generate_perl_tags {
 
 sub generate_generic_tags {
 	my ($path,$gfile) = @_;
+	dbg "<lang type>generic\n";
 	tags_remove_files("$path/tags",$gfile);
 	call_ctags("$path/tags",$gfile);
 }
