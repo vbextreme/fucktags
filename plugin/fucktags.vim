@@ -223,6 +223,7 @@ function! s:FkT_callback_message(channel,msg)
 		if g:fkt_win_position == 'left' || g:fkt_win_position == 'right'
 			let g:fkt_win_size = l:json[1].maxsize + g:fkt_offset_width
 		endif
+		
 		call s:FkT_display_tags()
 	elseif l:json[1].cmd == 'warning'
 		call s:FkT_display_message(l:json[1].cmd, l:json[1].descript)
