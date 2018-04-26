@@ -111,6 +111,7 @@ function! s:FkT_win_open()
 	nnoremap <buffer> e :call FkT_key_expand()<CR>
 	nnoremap <buffer> E :call FkT_expand_all()<CR>
 	nnoremap <buffer> q :call FkT_toggle_bar()<CR>
+	nnoremap <buffer> j :call FkT_jump()<CR>
 	"non muove il carret nella posizione voluta nnoremap <buffer> <LeftMouse> :call FkT_key_expand()<CR>
 	setlocal filetype=fucktags_syntax
 	hi clear CursorLine
@@ -187,11 +188,13 @@ function! FkT_key_expand()
 	let tkexpand = getline('.')
 perl << EOF
 	my $tk = VIM::Eval('tkexpand');
+	my $cho = VIM::Eval('g:fkt_char_open');
+	my $chc = VIM::Eval('g:fkt_char_closed');
 	if ($tk =~ /[\'\"]+/) {
 		VIM::DoCommand("let tkexpand = ''");
 	}
 	else {
-		my ($ret) = $tk =~ /[ \t+-]*(.*)/;
+		my ($ret) = $tk =~ /[ \t$chc$cho]*(.*)/;
 		VIM::DoCommand("let tkexpand = '$ret'");
 	}
 EOF
@@ -213,6 +216,70 @@ function! FkT_expand_all()
 		let g:fkt_dictags[fkey].EXPAND = 1
 	endfor
 	call s:FkT_display_tags()
+endfunction
+
+function! s:FkT_real_jump(bj,fj,rj) 
+	"fare tutti i casi
+	wincmd h
+	if a:bj != ''
+		call s:FkT_debug('real','buffer')
+		exe 'buffer ' . a:bj
+	elseif a:fj != ''
+		call s:FkT_debug('real','edit')
+		exe 'edit ' . a:fj
+	endif
+	call cursor(a:rj,1)
+endfunction
+
+function! FkT_jump()
+	let tjump = getline('.')
+perl << EOF
+	my $tk = VIM::Eval('tjump');
+	my $cho = VIM::Eval('g:fkt_char_open');
+	my $chc = VIM::Eval('g:fkt_char_closed');
+
+	if ( $tk =~ /[ \t$chc$cho]*([^\t]+)/ ) {
+		$tk = $1;
+		VIM::DoCommand("let tjump = '$tk'");
+	}
+	else{
+		VIM::DoCommand("let tjump = ''");
+	}
+EOF
+	call s:FkT_debug('select jump', tjump)
+	
+	for fkey in keys(g:fkt_dictags)
+		if fkey == tjump
+			call s:FkT_debug('jump to file','searching')
+			if bufname(fkey) != '' 
+				call s:FkT_debug('query','is open')
+			else
+				call s:FkT_debug('query', fkey . ' is not open ' . bufname(fkey) )
+			endif
+			call s:FkT_real_jump(bufname(fkey),fkey,1)
+			return
+		endif
+		for tkey in keys(g:fkt_dictags[fkey])
+			if tkey == 'EXPAND'
+				continue
+			elseif tkey == tjump
+				call s:FkT_debug('warning', 'cant jump to type')
+				return
+			endif
+			for ele in g:fkt_dictags[fkey][tkey]
+				if ele.tag == tjump
+					call s:FkT_debug('jump element', 'on line:' . ele.line)
+					if bufname(fkey) != '' 
+						call s:FkT_debug('query','is open')
+					else
+						call s:FkT_debug('query', fkey . ' is not open ' . bufname(fkey) )
+					endif
+					call s:FkT_real_jump(bufname(fkey),fkey,ele.line)
+					return
+				endif
+			endfor
+		endfor
+	endfor
 endfunction
 
 function! s:FkT_callback_message(channel,msg)

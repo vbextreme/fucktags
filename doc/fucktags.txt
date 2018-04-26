@@ -1,11 +1,11 @@
 *fucktags.txt* create and display tags
 
-			 _____           _    _____               
-			|  ___|   _  ___| | _|_   _|_ _  __ _ ___  ~
-			| |_ | | | |/ __| |/ / | |/ _` |/ _` / __| ~
-			|  _|| |_| | (__|   <  | | (_| | (_| \__ \ ~
-			|_|   \__,_|\___|_|\_\ |_|\__,_|\__, |___/ ~
-						                    |___/      ~
+             _____           _    _____               
+            |  ___|   _  ___| | _|_   _|_ _  __ _ ___  ~
+            | |_ | | | |/ __| |/ / | |/ _` |/ _` / __| ~
+            |  _|| |_| | (__|   <  | | (_| | (_| \__ \ ~
+            |_|   \__,_|\___|_|\_\ |_|\__,_|\__, |___/ ~
+                                             |___/      ~
 
 					Create and display Tags
 
@@ -40,6 +40,7 @@ on window bar have mapped this key:
 	q exit
 	e expand
 	E expand all
+	j jump to code
    
 ==============================================================================
 2. Configuration                                       *FuckTagsConfiguration*
@@ -83,7 +84,7 @@ FuckTags is GPLv3 licensed.
 4. Bugs                                                         *FuckTagsBugs*
 
 If you find a bug please post it on the issue tracker:
-http://github.com//
+https://github.com/vbextreme/fucktags/issues
 
 ==============================================================================
 5. Contributing                                         *FuckTagsContributing*
@@ -91,11 +92,14 @@ http://github.com//
 Think you can make this plugin better?  Awesome!  Fork it on GitHub and send 
 a pull request.
 
-GitHub: http://github.com//
+GitHub: http://github.com/fucktags
 
 ==============================================================================
 6. Changelog                                               *FuckTagsChangelog*
 
+v0.1 
+	* optimize ctags dependencies
+	* jump to code
 v0.0
     * Initial release.
 

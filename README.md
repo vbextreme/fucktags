@@ -1,9 +1,10 @@
-# FuckTags v0.0
+# FuckTags v0.1
 Create tags with dependencies resolver and display in window</br>
 
 Released under GPL v3
 
 ## Revision
+0.1 optimize ctags dependencies, add jump</br>
 0.0 initial</br>
 
 ## How To
@@ -34,6 +35,7 @@ on window bar have mapped this key:
 	q exit
 	e expand
 	E expand all
+	j jump to code
 ```
 
 ### Configuration
