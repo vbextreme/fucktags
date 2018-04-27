@@ -120,7 +120,14 @@ sub tags_remove_files {
 
 sub list_ctags {
 	my ($path,@files) = @_;
-	my $t = file_time("$path/tags");
+	my $t = 0;
+	if ( -f "$path/tags" ) {
+		$t = file_time("$path/tags");
+		dbg "<time>$t";
+	}
+	else {
+		dbg "<notime>$t";
+	}
 	for my $file (@files) {
 		dbg "<list ctags>$file\n";
 		call_ctags("$path/tags",$file) if tags_remove_files("$path/tags",$file,$t);
@@ -131,9 +138,11 @@ sub search_file_reverse {
 	my ($path,$match,$level) = @_;
 	my @res;
 	my @ret;
-
+	dbg "<search reverse>$path\n";
+	dbg "<search reverse>$match\n";
+	dbg "<search reverse>$level\n";
 	for (my $i = 0; $i < $level; $i++) {
-		@res = generate_search_file($path,$match);
+		@res = search_file($path,$match);
 		push @ret, @res if scalar @res; 
 		$path = dirname($path);
 	}
@@ -146,8 +155,12 @@ sub search_file {
 	push @res, $path;
 	my @ret;
 	while (my $p = pop @res) {
-		#print "SEARCH::$p\n";
-		opendir my $d, $p || die 'error path';
+		dbg "<search file>$p\n";
+		my $d;
+		unless ( opendir $d, $p ) {
+			dbg "<warning cant open file>";
+			next;
+		}
 		while (my $file = readdir($d)) {
 			next if $file =~ /^\./;
 			$file = "$p/$file";
@@ -197,6 +210,7 @@ sub file_time {
 
 sub generate_c_parse_include {
 	my ($mkf) = @_;
+	dbg "<grab>makefile\n";
 	my $out = qx(make -p -f $mkf 2> /dev/null);
 	my @inc = $out =~ /(-I[^ \t\n]+) /g;
 	return '' if scalar @inc == 0;
@@ -209,23 +223,27 @@ sub generate_c_parse_include {
 
 sub generate_c_try_include {
 	my ($path) = @_;
+	dbg "<search mkf>$path\n";
 	my ($mkf) = search_file_reverse($path,"Makefile|makefile",1);
 	my $inc = '';
 	($inc) = generate_c_parse_include($mkf) if $mkf;
+	dbg "<found>$inc\n";
 	return ($inc)
 }
 
 sub generate_c_dependencies {
 	my ($path,$cfile) = @_;
 	my ($inc) = generate_c_try_include($path);
-	my $out = qx(gcc $inc -M $cfile 2/dev/null);
+	my $out = qx(gcc $inc -M $cfile 2>/dev/null);
 	my @incs = split(/ /,$out);
 	
 	my @deps; 
 	for my $i (@incs) {
 		chomp $i;
+		dbg "<deps>$i\n";
 		next if $i eq '\\';
 		next if $i =~ /\.o/;
+		dbg "<push>$i\n";
 		push @deps, $i;
 	}
 	return @deps;
