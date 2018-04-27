@@ -288,6 +288,31 @@ sub generate_perl_tags {
 	list_ctags($path,@uses);
 }
 
+############
+### BASH ###
+###########
+
+sub generate_bash_script {
+	my ($file) = @_;
+	my @scr;
+	open my $fd, '<', $file or return;
+	for my $line (<$fd>) {
+		if ( $line =~ /^[ \t]*source[ \t\"]+([^ \t;]+)\"?/ ) {
+			$line = $1;
+			push @scr, $line if -f $line;
+		}
+	}
+	return @scr;
+}
+
+sub generate_bash_tags {
+	my ($path,$file) = @_;
+	dbg "<lang type>bash\n";
+	my @script = generate_bash_script($file);
+	push @script, $file;
+	list_ctags($path,@script);
+}
+
 ###############
 ### Generic ###
 ###############
@@ -298,7 +323,6 @@ sub generate_generic_tags {
 	tags_remove_files("$path/tags",$gfile);
 	call_ctags("$path/tags",$gfile);
 }
-
 
 #####################
 ### TAG GENERATOR ###
@@ -374,6 +398,13 @@ sub parse_tag_to_json {
 		$msg{'dictags'}{$tag[1]}{'EXPAND'}=$expand; 
 		push @{$msg{'dictags'}{$tag[1]}{$tag[3]}}, { 'regex' => $tag[2], 'tag' => $tag[0], 'line' => $tag[4], 'ref' => $tag[5] };
 	}
+	if ($max_size == 0) {
+		dbg "<parse>no tags in file";
+		$msg{'cmd'} = 'warning';
+		$msg{'descript'} = 'tags file not have a tags';
+		return encode_json \%msg;
+	}
+
 	$msg{'maxsize'} = $max_size;
 	return encode_json \%msg;
 }

@@ -27,7 +27,7 @@ CONTENTS                                                       *clam-contents*
 1. Usage                                                       *FuckTagsUsage*
 
 Call function FkT_generate_tags() for generate tags file, automatic 
-dependencies resolver for C/C++/Perl/Perl6 languages
+dependencies resolver for C/C++/Perl/Perl6/Bash languages
     :call FkT_generate_tags()
 
 Call function FkT_toggle_bar() for open window with tags
@@ -97,6 +97,9 @@ GitHub: http://github.com/fucktags
 ==============================================================================
 6. Changelog                                               *FuckTagsChangelog*
 
+v0.2
+	* add support for bash
+	* fix message if tags is empty
 v0.1 
 	* optimize ctags dependencies
 	* jump to code

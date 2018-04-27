@@ -1,13 +1,26 @@
-# FuckTags v0.1
+# FuckTags v0.2
 Create tags with dependencies resolver and display in window</br>
 
 Released under GPL v3
 
 ## Revision
+0.2 add support to bash, fix warning on empty tags</br>
 0.1 optimize ctags dependencies, add jump</br>
 0.0 initial</br>
 
 ## How To
+### Required 
+VIM8 build with perl interpreter</br>
+Perl</br>
+Perl::JSON</br>
+```
+cpan -i JSON
+```
+or use your package manager
+```
+dnf search perl-json
+```
+
 ### Install
 ```
 $ cd ~/.vim/bundle
