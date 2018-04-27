@@ -182,6 +182,21 @@ function! s:FkT_display_tags()
 			endfor
 		endfor
 	endfor
+
+	call FkT_focus()
+endfunction
+
+function! FkT_focus()
+perl << EOF
+	my $chc = VIM::Eval('g:fkt_char_open');
+	my $count = $curbuf->Count();
+	for (my $i = 1; $i<$count; ++$i) {
+		if ( $curbuf->Get($i) =~ /^[ \t]*$chc/ ) {
+			$curwin->Cursor($i,1);
+			last;
+		}
+	}
+EOF
 endfunction
 
 function! FkT_key_expand()

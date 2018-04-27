@@ -1,9 +1,10 @@
-# FuckTags v0.3
+# FuckTags v0.4
 Create tags with dependencies resolver and display in window</br>
 
 Released under GPL v3
 
 ## Revision
+0.4 add focus on file expand
 0.3 fix C/C++ dependencies, install procedure
 0.2 add support to bash, fix warning on empty tags</br>
 0.1 optimize ctags dependencies, add jump</br>
@@ -63,6 +64,9 @@ Call function FkT_toggle_bar() for open window with tags
 you can remap
 ```
 nmap <F8> :call FkT_toggle_bar()
+nmap <F9> :call FkT_generate_tag()
+inoremap <F8> :call FkT_toggle_bar()
+inoremap <F9> :call FkT_generate_tag()
 ```
 on window bar have mapped this key:
 ```
@@ -80,13 +84,13 @@ let g:fkt_win_position = 'right'
 Default: 'right'</br>
 values: left, right, top, bottom</br>
 </br>
-Set this to change default cher for open group:
+Set this to change default char for open group:
 ```
 let g:fkt_char_open = 'v'
 ```
 Default: '-'</br>
 </br>
-Set this to change default cher for closed group:
+Set this to change default char for closed group:
 ```
 let g:fkt_char_closed = '>'
 ```

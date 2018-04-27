@@ -60,7 +60,7 @@ values: left, right, top, bottom
 ------------------------------------------------------------------------------
 2.2 g:fkt_char_open                          *FuckTagsConfiguration_char_open*
 
-Set this to change default cher for open group: >
+Set this to change default char for open group: >
 
     let g:fkt_char_open = 'v'
 
@@ -69,7 +69,7 @@ Default: '-'
 ------------------------------------------------------------------------------
 2.2 g:fkt_char_closed                      *FuckTagsConfiguration_char_closed*
 
-Set this to change default cher for closed group: >
+Set this to change default char for closed group: >
 
     let g:fkt_char_closed = '>'
 
@@ -97,6 +97,8 @@ GitHub: http://github.com/fucktags
 ==============================================================================
 6. Changelog                                               *FuckTagsChangelog*
 
+v0.4
+	* add focus on file expand
 v0.3
 	* fix C/C++ dependencies
 	* add install procedure
