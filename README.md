@@ -1,9 +1,10 @@
-# FuckTags v0.2
+# FuckTags v0.3
 Create tags with dependencies resolver and display in window</br>
 
 Released under GPL v3
 
 ## Revision
+0.3 fix C/C++ dependencies, install procedure
 0.2 add support to bash, fix warning on empty tags</br>
 0.1 optimize ctags dependencies, add jump</br>
 0.0 initial</br>
@@ -22,11 +23,31 @@ dnf search perl-json
 ```
 
 ### Install
+#### Vundle
+Place this in your .vimrc:
+```
+Plugin 'vbextreme/fucktags'
+```
+run the following in Vim:
+```
+:source %
+:PluginInstall
+```
+For Vundle version < 0.10.2, replace Plugin with Bundle above.
+#### VimPlug
+Place this in your .vimrc:
+```
+Plug 'vbextreme/fucktags'
+```
+then run the following in Vim:
+```
+:source %
+:PlugInstall
+```
+#### Pathogen
 ```
 $ cd ~/.vim/bundle
 $ git clone https://github.com/vbextreme/fucktags.git 
-$ cd ..
-$ cp ./bundle/fucktas/syntax/* ./syntax/
 ```
 
 ### Usage

@@ -97,6 +97,9 @@ GitHub: http://github.com/fucktags
 ==============================================================================
 6. Changelog                                               *FuckTagsChangelog*
 
+v0.3
+	* fix C/C++ dependencies
+	* add install procedure
 v0.2
 	* add support for bash
 	* fix message if tags is empty
